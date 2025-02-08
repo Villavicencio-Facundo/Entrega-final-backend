@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrito de Compras</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.8em;
+      color: #28a745;
+      padding: 40px 0;
+      margin: 0;
+    }
+
+    .cart-container {
+      padding: 30px;
+      text-align: center;
+    }
+
+    .cart-item {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      margin: 20px 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .cart-item h3 {
+      font-size: 1.8em;
+      color: #333;
+    }
+
+    .cart-item .price {
+      font-size: 1.5em;
+      color: #28a745;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 40px;
+    }
+
+    .checkout-btn, .back-btn {
+      background-color: #28a745;
+      color: white;
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .checkout-btn:hover, .back-btn:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Tu Carrito</h1>
+
+  <div class="cart-container">
+    {{#each cart}}
+      <div class="cart-item">
+        <h3>{{this.name}}</h3>
+        <p>{{this.description}}</p>
+        <p class="price">$ {{this.price}}</p>
+        <p>Cantidad: {{this.quantity}}</p>
+      </div>
+    {{/each}}
+
+    {{#if cart.length}}
+      <div class="button-container">
+        <button class="checkout-btn">Proceder a la Compra</button>
+        <a href="/products">
+          <button class="back-btn">Volver a Productos</button>
+        </a>
+      </div>
+    {{else}}
+      <p>Tu carrito está vacío</p>
+      <a href="/products">
+        <button class="back-btn">Volver a Productos</button>
+      </a>
+    {{/if}}
+  </div>
+
+</body>
+</html>

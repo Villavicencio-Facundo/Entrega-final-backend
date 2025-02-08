@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Productos</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+ 
+  <style>
+    
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.8em;
+      color: #28a745;
+      padding: 40px 0;
+      margin: 0;
+    }
+
+    .products-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      padding: 30px;
+    }
+
+    
+    .product-card {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 280px;
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+
+    .product-card h3 {
+      font-size: 1.8em;
+      color: #333;
+      margin: 10px 0;
+    }
+
+    .product-card p {
+      color: #777;
+      font-size: 1.1em;
+      margin: 10px 0;
+    }
+
+    .product-card .price {
+      font-size: 1.5em;
+      color: #28a745;
+      margin: 20px 0;
+    }
+
+    .product-card .add-to-cart {
+      background-color: #FF6347;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .product-card .add-to-cart:hover {
+      background-color: #FF4500;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Productos Disponibles</h1>
+
+  <div class="products-container">
+    {{#each products}}
+      <div class="product-card">
+        <img src="{{this.imageUrl}}" alt="{{this.name}}">
+        <h3>{{this.name}}</h3>
+        <p>{{this.description}}</p>
+        <p class="price">$ {{this.price}}</p>
+        <button class="add-to-cart" data-id="{{this._id}}">Agregar al carrito</button>
+      </div>
+    {{/each}}
+  </div>
+
+  <script>
+    
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+      button.addEventListener('click', async function() {
+        const productId = this.getAttribute('data-id');
+        const quantity = 1; 
+
+        try {
+          const response = await fetch('/cart', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ productId, quantity })
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            Swal.fire({
+              title: 'Producto agregado!',
+              text: 'El producto ha sido agregado al carrito.',
+              icon: 'success',
+              confirmButtonText: 'OK'
+            });
+          } else {
+            Swal.fire({
+              title: 'Error',
+              text: result.message,
+              icon: 'error',
+              confirmButtonText: 'OK'
+            });
+          }
+        } catch (error) {
+          Swal.fire({
+            title: 'Error',
+            text: 'Hubo un problema al agregar el producto al carrito.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
